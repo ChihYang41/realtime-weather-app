@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { ThemeProvider } from '@emotion/react'
+import dayjs from 'dayjs'
 import { ReactComponent as DayCloudyIcon } from './images/day-cloudy.svg'
 import { ReactComponent as AirFlowIcon } from './images/airFlow.svg'
 import { ReactComponent as RainIcon } from './images/rain.svg'
@@ -83,6 +84,7 @@ const Rain = styled.div`
   font-size: 16x;
   font-weight: 300;
   color: ${({ theme }) => theme.textColor};
+  margin-bottom: 20px;
 
   svg {
     width: 25px;
@@ -115,29 +117,38 @@ const DayCloudy = styled(DayCloudyIcon)`
 function App() {
   const [currentTheme, setCurrentTheme] = useState<TThemeMode>('light')
 
+  const [currentWeather, setCurrentWeather] = useState({
+    locationName: '臺北市',
+    description: '多雲時晴',
+    windSpeed: 1.1,
+    temperature: 22.9,
+    rainPossibility: 48.3,
+    observationTime: '2020-12-12 22:10:00',
+  })
+  console.log(dayjs(currentWeather.observationTime))
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
         <WeatherCard>
-          <Location>台北市</Location>
-          <Description>多雲時雨</Description>
+          <Location>{currentWeather.locationName}</Location>
+          <Description>{currentWeather.description}</Description>
           <CurrentWeather>
             <Temperature>
-              23 <Celsius>°C</Celsius>
+              {Math.round(currentWeather.temperature)} <Celsius>°C</Celsius>
             </Temperature>
             <DayCloudy />
           </CurrentWeather>
           <AirFlow>
             <AirFlowIcon />
-            23 m/h
+            {currentWeather.windSpeed} m/h
           </AirFlow>
           <Rain>
             <RainIcon />
-            48%
+            {currentWeather.rainPossibility}%
           </Rain>
           <Refresh>
-            最後觀測時間：上午 12:03
-            <RefreshIcon />
+            最後觀測時間：
+            {dayjs().format(currentWeather.observationTime)} <RefreshIcon />
           </Refresh>
         </WeatherCard>
       </Container>

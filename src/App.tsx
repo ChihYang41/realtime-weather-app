@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import { ThemeProvider } from '@emotion/react'
 import { ReactComponent as DayCloudyIcon } from './images/day-cloudy.svg'
 import { ReactComponent as AirFlowIcon } from './images/airFlow.svg'
 import { ReactComponent as RainIcon } from './images/rain.svg'
 import { ReactComponent as RefreshIcon } from './images/refresh.svg'
+import { theme } from './theme'
+
+type TThemeMode = 'light' | 'dark'
+type TTheme = typeof theme['light']
+
+declare module '@emotion/react' {
+  export interface Theme extends TTheme {}
+}
 
 const Container = styled.div`
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.backgroundColor};
   height: 100%;
   display: flex;
   align-items: center;
@@ -16,21 +25,21 @@ const Container = styled.div`
 const WeatherCard = styled.div`
   position: relative;
   min-width: 360px;
-  box-shadow: 0 1px 3px 0 #999999;
-  background-color: #f9f9f9;
+  box-shadow: ${({ theme }) => theme.boxShadow};
+  background-color: ${({ theme }) => theme.foregroundColor};
   box-sizing: border-box;
   padding: 30px 15px;
 `
 
 const Location = styled.div`
   font-size: 28px;
-  color: #212121;
+  color: ${({ theme }) => theme.titleColor};
   margin-bottom: 20px;
 `
 
 const Description = styled.div`
   font-size: 16px;
-  color: #828282;
+  color: ${({ theme }) => theme.textColor};
   margin-bottom: 30px;
 `
 
@@ -42,7 +51,7 @@ const CurrentWeather = styled.div`
 `
 
 const Temperature = styled.div`
-  color: #757575;
+  color: ${({ theme }) => theme.temperatureColor};
   font-size: 96px;
   font-weight: 300;
   display: flex;
@@ -58,7 +67,7 @@ const AirFlow = styled.div`
   align-items: center;
   font-size: 16x;
   font-weight: 300;
-  color: #828282;
+  color: ${({ theme }) => theme.textColor};
   margin-bottom: 20px;
 
   svg {
@@ -73,7 +82,7 @@ const Rain = styled.div`
   align-items: center;
   font-size: 16x;
   font-weight: 300;
-  color: #828282;
+  color: ${({ theme }) => theme.textColor};
 
   svg {
     width: 25px;
@@ -89,7 +98,7 @@ const Refresh = styled.div`
   font-size: 12px;
   display: inline-flex;
   align-items: flex-end;
-  color: #828282;
+  color: ${({ theme }) => theme.textColor};
 
   svg {
     margin-left: 10px;
@@ -104,31 +113,35 @@ const DayCloudy = styled(DayCloudyIcon)`
 `
 
 function App() {
+  const [currentTheme, setCurrentTheme] = useState<TThemeMode>('light')
+
   return (
-    <Container>
-      <WeatherCard>
-        <Location>台北市</Location>
-        <Description>多雲時雨</Description>
-        <CurrentWeather>
-          <Temperature>
-            23 <Celsius>°C</Celsius>
-          </Temperature>
-          <DayCloudy />
-        </CurrentWeather>
-        <AirFlow>
-          <AirFlowIcon />
-          23 m/h
-        </AirFlow>
-        <Rain>
-          <RainIcon />
-          48%
-        </Rain>
-        <Refresh>
-          最後觀測時間：上午 12:03
-          <RefreshIcon />
-        </Refresh>
-      </WeatherCard>
-    </Container>
+    <ThemeProvider theme={theme[currentTheme]}>
+      <Container>
+        <WeatherCard>
+          <Location>台北市</Location>
+          <Description>多雲時雨</Description>
+          <CurrentWeather>
+            <Temperature>
+              23 <Celsius>°C</Celsius>
+            </Temperature>
+            <DayCloudy />
+          </CurrentWeather>
+          <AirFlow>
+            <AirFlowIcon />
+            23 m/h
+          </AirFlow>
+          <Rain>
+            <RainIcon />
+            48%
+          </Rain>
+          <Refresh>
+            最後觀測時間：上午 12:03
+            <RefreshIcon />
+          </Refresh>
+        </WeatherCard>
+      </Container>
+    </ThemeProvider>
   )
 }
 

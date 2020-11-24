@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { ThemeProvider } from '@emotion/react'
 import dayjs from 'dayjs'
@@ -7,6 +7,7 @@ import { ReactComponent as RainIcon } from './images/rain.svg'
 import { ReactComponent as RefreshIcon } from './images/refresh.svg'
 import { ReactComponent as LoadingIcon } from './images/loading.svg'
 import { theme } from './theme'
+import { getMoment } from './utils/helpers'
 import WeatherIcon from './components/WeatherIcon'
 
 // Theme Type
@@ -232,7 +233,6 @@ const getWeatherForecast = () => {
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState<TThemeMode>('light')
-
   const [weatherElement, setWeatherElement] = useState({
     locationName: '',
     description: '',
@@ -244,6 +244,8 @@ function App() {
     weatherCode: 1,
     isLoading: true,
   })
+
+  const moment = useMemo(() => getMoment(LOCATION_NAME_FORECAST), [])
 
   const fetchData = useCallback(async () => {
     setWeatherElement((prevState) => ({
@@ -264,6 +266,10 @@ function App() {
   }, [])
 
   useEffect(() => {
+    setCurrentTheme(moment === 'day' ? 'light' : 'dark')
+  }, [moment])
+
+  useEffect(() => {
     fetchData()
   }, [fetchData])
 
@@ -278,7 +284,7 @@ function App() {
     observationTime,
     weatherCode,
   } = weatherElement
-  console.log(weatherCode)
+
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
@@ -291,7 +297,7 @@ function App() {
             <Temperature>
               {Math.round(temperature)} <Celsius>°C</Celsius>
             </Temperature>
-            <WeatherIcon weatherCode={weatherCode} moment={'night'} />
+            <WeatherIcon weatherCode={weatherCode} moment={moment} />
           </CurrentWeather>
           <AirFlow>
             <AirFlowIcon />

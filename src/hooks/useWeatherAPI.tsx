@@ -7,7 +7,7 @@ interface IProps {
 }
 
 // Current Weather Type
-interface IWeatherElements {
+interface ICurrentWeather {
   WDSD: string
   TEMP: string
 }
@@ -51,14 +51,14 @@ const getCurrentWeather = ({
       const { weatherElement } = data.records.location[0]
 
       const weatherElements = weatherElement.reduce(
-        (weatherElements: IWeatherElements, item: IWeatherItem) => {
+        (weatherElements: ICurrentWeather, item: IWeatherItem) => {
           if (['WDSD', 'TEMP'].includes(item.elementName)) {
-            weatherElements[item.elementName as keyof IWeatherElements] =
+            weatherElements[item.elementName as keyof ICurrentWeather] =
               item.elementValue
           }
           return weatherElements
         },
-        {} as IWeatherElements
+        {} as ICurrentWeather
       )
 
       return {
@@ -92,7 +92,7 @@ const getWeatherForecast = ({
           }
           return neededElement
         },
-        {} as IWeatherElements
+        {} as ICurrentWeather
       )
 
       return {

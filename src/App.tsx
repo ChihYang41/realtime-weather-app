@@ -4,6 +4,7 @@ import { ThemeProvider } from '@emotion/react'
 import { theme } from './theme'
 import { getMoment } from './utils/helpers'
 import WeatherCard, { IWeatherElement } from './views/WeatherCard'
+import WeatherSetting from './views/WeatherSetting'
 import useWeatherAPI from './hooks/useWeatherAPI'
 
 // Theme Type
@@ -28,6 +29,7 @@ const LOCATION_NAME_FORECAST = '臺北市'
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState<TThemeMode>('light')
+  const [currentPage, setCurrentPage] = useState('WeatherCard')
 
   const moment = useMemo(() => getMoment(LOCATION_NAME_FORECAST), [])
   const [weatherElement, fetchData] = useWeatherAPI({
@@ -36,6 +38,12 @@ function App() {
     authorizationKey: AUTHORIZATION_KEY,
   })
 
+  const handleCurrentPageChange = (
+    currentPage: 'WeatherCard' | 'WeatherSetting'
+  ) => {
+    setCurrentPage(currentPage)
+  }
+
   useEffect(() => {
     setCurrentTheme(moment === 'day' ? 'light' : 'dark')
   }, [moment])
@@ -43,11 +51,17 @@ function App() {
   return (
     <ThemeProvider theme={theme[currentTheme]}>
       <Container>
-        <WeatherCard
-          weatherElement={weatherElement as IWeatherElement}
-          moment={moment}
-          fetchData={fetchData as Function}
-        />
+        {currentPage === 'WeatherCard' && (
+          <WeatherCard
+            weatherElement={weatherElement as IWeatherElement}
+            moment={moment}
+            fetchData={fetchData as Function}
+            handleCurrentPageChange={handleCurrentPageChange}
+          />
+        )}
+        {currentPage === 'WeatherSetting' && (
+          <WeatherSetting handleCurrentPageChange={handleCurrentPageChange} />
+        )}
       </Container>
     </ThemeProvider>
   )

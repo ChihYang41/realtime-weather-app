@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { availableLocations } from '../utils/helpers'
 
+interface IProps {
+  handleCurrentPageChange: Function
+}
 interface IAvailableLocation {
   cityName: string
   locationName: string
@@ -99,7 +102,7 @@ const Save = styled.button`
   }
 `
 
-const WeatherSetting = () => {
+const WeatherSetting = ({ handleCurrentPageChange }: IProps) => {
   return (
     <WeatherSettingWrapper>
       <Title>設定</Title>
@@ -114,7 +117,7 @@ const WeatherSetting = () => {
       </StyledSelect>
 
       <ButtonGroup>
-        <Back>返回</Back>
+        <Back onClick={() => handleCurrentPageChange('WeatherCard')}>返回</Back>
         <Save>儲存</Save>
       </ButtonGroup>
     </WeatherSettingWrapper>

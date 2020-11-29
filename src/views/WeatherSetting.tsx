@@ -103,12 +103,23 @@ const Save = styled.button`
 `
 
 const WeatherSetting = ({ handleCurrentPageChange }: IProps) => {
+  const [locationName, setLocationName] = useState('臺北市')
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLocationName(e.target.value)
+  }
+
   return (
     <WeatherSettingWrapper>
       <Title>設定</Title>
       <StyledLabel htmlFor="location">地區</StyledLabel>
 
-      <StyledSelect id="location" name="location">
+      <StyledSelect
+        id="location"
+        name="location"
+        value={locationName}
+        onChange={handleChange}
+      >
         {availableLocations.map((location: IAvailableLocation) => (
           <option value={location.cityName} key={location.cityName}>
             {location.cityName}

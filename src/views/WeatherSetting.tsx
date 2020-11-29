@@ -3,7 +3,9 @@ import styled from '@emotion/styled'
 import { availableLocations } from '../utils/helpers'
 
 interface IProps {
+  cityName: string
   handleCurrentPageChange: Function
+  handleCurrentCityChange: Function
 }
 interface IAvailableLocation {
   cityName: string
@@ -102,11 +104,21 @@ const Save = styled.button`
   }
 `
 
-const WeatherSetting = ({ handleCurrentPageChange }: IProps) => {
-  const [locationName, setLocationName] = useState('臺北市')
+const WeatherSetting = ({
+  cityName,
+  handleCurrentPageChange,
+  handleCurrentCityChange,
+}: IProps) => {
+  const [locationName, setLocationName] = useState(cityName)
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLocationName(e.target.value)
+  }
+
+  const handleSave = () => {
+    handleCurrentCityChange(locationName)
+    handleCurrentPageChange('WeatherCard')
+    localStorage.setItem('cityName', locationName)
   }
 
   return (
@@ -129,7 +141,7 @@ const WeatherSetting = ({ handleCurrentPageChange }: IProps) => {
 
       <ButtonGroup>
         <Back onClick={() => handleCurrentPageChange('WeatherCard')}>返回</Back>
-        <Save>儲存</Save>
+        <Save onClick={handleSave}>儲存</Save>
       </ButtonGroup>
     </WeatherSettingWrapper>
   )

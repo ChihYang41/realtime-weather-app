@@ -26,6 +26,7 @@ interface IProps {
   moment: 'day' | 'night'
   fetchData: Function
   handleCurrentPageChange: Function
+  cityName: string
 }
 
 // Styled Components Type
@@ -145,9 +146,9 @@ export default function WeatherCard({
   moment,
   fetchData,
   handleCurrentPageChange,
+  cityName,
 }: IProps) {
   const {
-    locationName,
     description,
     comfortability,
     temperature,
@@ -160,7 +161,7 @@ export default function WeatherCard({
   return (
     <WeatherCardWrapper>
       <Cog onClick={() => handleCurrentPageChange('WeatherSetting')} />
-      <Location>{locationName}</Location>
+      <Location>{cityName}</Location>
       <Description>
         {description} {comfortability}
       </Description>

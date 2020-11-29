@@ -1,6 +1,6 @@
 {
   "name": "realtime-weather-app",
-  "homepage": "https://github.com/ChihYang41/realtime-weather-app",
+  "homepage": "https://ChihYang41.github.com/realtime-weather-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
